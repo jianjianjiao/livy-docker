@@ -1,10 +1,6 @@
 FROM ubuntu:18.04
 MAINTAINER rotang <rotang@microsoft.com>
 
-# Add R list
-#RUN echo 'deb http://cran.rstudio.com/bin/linux/ubuntu trusty/' | sudo tee -a /etc/apt/sources.list.d/r.list && \
-#apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9
-
 # packages
 RUN apt-get update && apt-get install -y --no-install-recommends \
     wget \
@@ -27,13 +23,12 @@ ENV HADOOP_CONF_DIR /etc/hadoop/conf
 
 ENV SPARK_HOME /usr/lib/spark/
 
-ENV LIVY_LOG_DIR /usr/lib/spark/
+ENV LIVY_LOG_DIR /usr/local/livy-logs/
 
 # Download and unzip Spark
 RUN wget $LIVY_DOWNLOAD_URL && \
     unzip $LIVY_VERSION_FULL.zip -d /apps && \
-    rm $LIVY_VERSION_FULL.zip && \
-    mkdir -p $LIVY_APP_PATH/logs
+    rm $LIVY_VERSION_FULL.zip
 	
 # Add custom files, set permissions
 ADD entrypoint.sh .
